@@ -1,0 +1,10 @@
+# Die Testversion selbst haengt als Release-Anhang an einem Tag, nicht als
+# Datei im Repository — sonst traegt jeder Klon 71 MB mit sich herum, und die
+# Historie wuerde mit jeder Fassung um dieselbe Groesse wachsen.
+*.exe
+*.zip
+dist/
+
+# Windows-Kleinkram
+Thumbs.db
+desktop.ini
