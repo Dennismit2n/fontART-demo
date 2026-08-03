@@ -44,9 +44,9 @@ That warning is not about a virus; it means nobody paid for a certificate yet. I
 
 ## Privacy
 
-fontART sends nothing. Not in the sense of “we promise not to”, but: there is no code in it that could. A search across the whole program for `fetch`, `XMLHttpRequest`, `WebSocket` and `sendBeacon` returns **nothing**. There is no visitor counter — not even in the browser version, unlike every other tool in this workshop. No update check, no crash reporting, no font catalogue being consulted.
+**The Windows version never touches the network at all.** Not in the sense of “we promise not to”, but: there is no code in it that could. A search across the whole program for `fetch`, `XMLHttpRequest`, `WebSocket` and `sendBeacon` returns **nothing**. No update check, no crash reporting, no font catalogue being consulted.
 
-One difference deserves saying out loud: **the Windows version never touches the network at all.** The browser version has to be loaded once, and GitHub sees that somebody fetched the page — as with any website. After that it stops: what you draw stays in your browser. You do not have to take my word for it — open the developer tools, watch the network tab, draw and export: not one further request goes out.
+**The browser version** has to be loaded once, and GitHub sees that somebody fetched the page — as with any website. It also counts visits anonymously via GoatCounter, like the other tools in this workshop: no cookies, no profiles, only the page view itself is counted (disclosed in the page’s guide as well). After that it stops: what you draw stays in your browser. You do not have to take my word for it — open the developer tools, watch the network tab, draw and export: apart from the single count pixel, not one request goes out, and your drawings are in none of them.
 
 The only address in the program is the link to the guide on the workshop page — and it only opens when you click it, in your own browser.
 

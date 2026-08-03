@@ -44,9 +44,9 @@ Diese Warnung bedeutet keinen Virus, sondern dass für ein Zertifikat noch niema
 
 ## Datenschutz
 
-fontART sendet nichts. Nicht im Sinne von „wir versprechen es“, sondern: Es steckt kein Code darin, der es könnte. Eine Suche über das ganze Programm nach `fetch`, `XMLHttpRequest`, `WebSocket` und `sendBeacon` findet **nichts**. Kein Besucherzähler — auch nicht in der Browser-Fassung, anders als bei den übrigen Werkzeugen der Werkstatt. Keine Update-Prüfung, keine Absturzmeldung, kein Schriftenkatalog, der befragt wird.
+**Die Windows-Fassung berührt das Netz überhaupt nicht.** Nicht im Sinne von „wir versprechen es“, sondern: Es steckt kein Code darin, der es könnte. Eine Suche über das ganze Programm nach `fetch`, `XMLHttpRequest`, `WebSocket` und `sendBeacon` findet **nichts**. Keine Update-Prüfung, keine Absturzmeldung, kein Schriftenkatalog, der befragt wird.
 
-Ein Unterschied gehört trotzdem gesagt: **Die Windows-Fassung berührt das Netz überhaupt nicht.** Die Browser-Fassung muss einmal geladen werden, und dabei sieht GitHub, dass jemand die Seite abgerufen hat — so wie bei jeder Webseite. Danach ist Schluss: Was du malst, bleibt in deinem Browser. Nachprüfbar ohne mir zu glauben — Entwicklerwerkzeuge öffnen, Netzwerk-Reiter beobachten, malen und exportieren: Es geht keine einzige weitere Anfrage hinaus.
+**Die Browser-Fassung** muss einmal geladen werden, und dabei sieht GitHub, dass jemand die Seite abgerufen hat — so wie bei jeder Webseite. Außerdem zählt sie Besuche anonym per GoatCounter, wie die übrigen Werkzeuge der Werkstatt: ohne Cookies, ohne Profile, gezählt wird nur der Seitenaufruf (offengelegt auch in der Anleitung der Seite). Danach ist Schluss: Was du malst, bleibt in deinem Browser. Nachprüfbar ohne mir zu glauben — Entwicklerwerkzeuge öffnen, Netzwerk-Reiter beobachten, malen und exportieren: Außer dem einen Zähl-Pixel geht keine Anfrage hinaus, und deine Zeichnungen stecken in keiner.
 
 Die einzige Adresse im Programm ist der Verweis auf die Anleitung in der Werkstatt — und der öffnet sich nur, wenn du ihn anklickst.
 
