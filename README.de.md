@@ -29,6 +29,7 @@ Diese Warnung bedeutet keinen Virus, sondern dass für ein Zertifikat noch niema
 
 | | |
 |---|---|
+| 🌍 **14 Sprachen** | Deutsch, English, Español, Français, Italiano, Nederlands, Polski, Português, Türkçe, Русский, हिन्दी, 中文, 日本語, 한국어 — automatisch erkannt, oben umschaltbar. Browser-Seite wie Windows-Programm. |
 | ✏️ **Alle Werkzeuge sind offen** | Malen, Konstruktionslinien, Geist-Glyph zum Vergleichen, Seitenabstände, Kerning-Vorschläge, Kerning-Editor, Tipptest, Reife-Analyse, Zeichentabelle. Nichts ist ausgegraut, um dich zu ärgern. |
 | 💾 **Speichern und Laden gehen vollständig** | Dein Projekt ist eine `.fontart.json`-Datei. Speichern, wieder laden, weitermachen — auch nachdem die Uhr abgelaufen ist. |
 | ⏳ **60 Minuten je Start — nur unter Windows** | Die Uhr läuft mit dem Programm und lässt sich nicht anhalten; ein kleingeklapptes Fenster zählt weiter. Ist die Zeit um, hören Malen und Exportieren auf. Speichern geht weiter — deine Zeichnung ist also nie verloren. **Im Browser gibt es keine Uhr:** dort wäre Neuladen ohnehin die Umgehung, und gesperrt wird hier das Ergebnis, nicht die Zeit. |

@@ -29,6 +29,7 @@ That warning is not about a virus; it means nobody paid for a certificate yet. I
 
 | | |
 |---|---|
+| 🌍 **14 languages** | Deutsch, English, Español, Français, Italiano, Nederlands, Polski, Português, Türkçe, Русский, हिन्दी, 中文, 日本語, 한국어 — detected automatically, switchable in the header. Both the browser page and the Windows program. |
 | ✏️ **Every tool is unlocked** | Drawing, construction lines, the ghost glyph for comparison, sidebearings, kerning suggestions, the kerning editor, the typing test, the maturity analysis, the character map. Nothing is greyed out to nag you. |
 | 💾 **Saving and loading work fully** | Your project is a `.fontart.json` file. Save it, load it again, carry on — including after the clock has run out. |
 | ⏳ **60 minutes per start — Windows only** | The clock starts with the program and cannot be paused; a minimised window keeps counting. When time is up, drawing and exporting stop. Saving keeps working, so you never lose your drawing. **In the browser there is no clock:** reloading would be the way around it anyway, and what is locked here is the result, not the time. |

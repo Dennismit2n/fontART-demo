@@ -1,0 +1,12 @@
+# Keine Zeilenende-Umwandlung. Sonst nichts.
+#
+# Hier liegt kein Quelltext, sondern ein Bau-Erzeugnis: index.html entsteht aus
+# der unveroeffentlichten Quelle ueber build.js und muss byte-genau so bleiben,
+# wie der Bau sie erzeugt hat. Auf diesem Rechner steht core.autocrlf auf true -
+# ohne diese Datei zieht Git die ausgelieferte Seite beim naechsten Klon oder
+# checkout auf CRLF, und dann stimmt sie nicht mehr mit dem Bau ueberein.
+#
+# Dieselbe Falle hat in der Quelle schon einmal zugeschlagen: ein git stash/pop
+# machte aus template.html eine CRLF-Datei, das Bundle wurde 626 Bytes groesser
+# und die Referenzpruefsumme war hin.
+* -text
