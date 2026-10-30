@@ -15,6 +15,10 @@
 <meta name="apple-mobile-web-app-title" content="fontART">
 <meta name="theme-color" content="#0e0c16">
 <link rel="manifest" href="./manifest.webmanifest">
+<!-- Knopf „Installieren“: Chrome, Edge und Samsung Internet melden die Installierbarkeit mit
+     beforeinstallprompt, manchmal bevor das grosse App-Skript laeuft. Das Ereignis bleibt hier
+     liegen, bis der Knopf es abholt (app.js, installKnopf). -->
+<script>window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.deferredInstall=e;if(window.onInstallReady)window.onInstallReady();});</script>
 <title>fontART Designer — Testversion zum Ausprobieren</title>
 <!-- Link-Vorschau. Nur die Web-Fassung braucht sie: Die exe wird nicht
      verlinkt, sondern heruntergeladen. Das Bild liegt daneben im Repo und
@@ -444,6 +448,11 @@
     position: absolute; width: 1px; height: 1px;
     overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
   }
+  /* Knopf „Installieren“: Am Handy rollt die Kopfzeile seitlich, ihre Knoepfe stehen rechts
+     ausserhalb des Bildes. Der Knopf kommt dort deshalb ganz nach vorn, solange es ihn gibt. */
+  @media (max-width: 900px) {
+    #installBtn { order: -1; }
+  }
   </style>
 </head>
 <body>
@@ -462,6 +471,7 @@
       <button class="hbtn" id="catBtn" data-i18n="btnKategorien" data-i18n-title="tipKategorien" title="Zeichen-Kategorien ein-/ausblenden">⚙️ Kategorien</button>
       <button class="hbtn" id="themeBtn" data-i18n="btnDesign" data-i18n-title="tipDesign" title="Farbwelten, jede in drei Stilen">🎨 Design</button>
   <select class="hbtn" id="langSelect" data-i18n-title="tipSprache" title="Sprache" aria-label="Sprache" data-i18n-aria="tipSprache"></select>
+  <button class="hbtn" id="installBtn" data-i18n="btnInstallieren" hidden>📲 Installieren</button>
   <button class="hbtn" id="helpBtn" data-i18n="btnAnleitung">? Anleitung</button>
   <div class="menuwrap">
     <button class="hbtn" id="fileBtn" data-i18n="btnDatei">📁 Datei ▾</button>
@@ -2159,6 +2169,8 @@ var I18N = {
     btnDesign: '🎨 Design',
     tipDesign: 'Farbwelten, jede in drei Stilen',
     btnAnleitung: '? Anleitung',
+    btnInstallieren: '📲 Installieren',
+    msgInstalliert: '📲 Als App installiert.',
     btnDatei: '📁 Datei ▾',
     btnSpeichern: '💾 Speichern',
     btnLaden: '📂 Laden',
@@ -2716,6 +2728,8 @@ var I18N = {
     btnDesign: '🎨 Design',
     tipDesign: 'Color worlds, each in three styles',
     btnAnleitung: '? Guide',
+    btnInstallieren: '📲 Install',
+    msgInstalliert: '📲 Installed as an app.',
     btnDatei: '📁 File ▾',
     btnSpeichern: '💾 Save',
     btnLaden: '📂 Load',
@@ -3272,6 +3286,8 @@ var I18N = {
     btnDesign: '🎨 Diseño',
     tipDesign: 'Mundos de color, cada uno en tres estilos',
     btnAnleitung: '? Guía',
+    btnInstallieren: '📲 Instalar',
+    msgInstalliert: '📲 Instalación completada.',
     btnDatei: '📁 Archivo ▾',
     btnSpeichern: '💾 Guardar',
     btnLaden: '📂 Cargar',
@@ -3828,6 +3844,8 @@ var I18N = {
     btnDesign: '🎨 Design',
     tipDesign: 'Des univers de couleurs, chacun en trois styles',
     btnAnleitung: '? Guide',
+    btnInstallieren: '📲 Installer',
+    msgInstalliert: '📲 Installation terminée.',
     btnDatei: '📁 Fichier ▾',
     btnSpeichern: '💾 Enregistrer',
     btnLaden: '📂 Ouvrir',
@@ -4384,6 +4402,8 @@ var I18N = {
     btnDesign: '🎨 Design',
     tipDesign: 'Atmosfere di colore, ognuna in tre stili',
     btnAnleitung: '? Guida',
+    btnInstallieren: '📲 Installa',
+    msgInstalliert: '📲 Installazione completata.',
     btnDatei: '📁 File ▾',
     btnSpeichern: '💾 Salva',
     btnLaden: '📂 Apri',
@@ -4940,6 +4960,8 @@ var I18N = {
     btnDesign: '🎨 Design',
     tipDesign: 'Kleurwerelden, elk in drie stijlen',
     btnAnleitung: '? Handleiding',
+    btnInstallieren: '📲 Installeren',
+    msgInstalliert: '📲 Als app geïnstalleerd.',
     btnDatei: '📁 Bestand ▾',
     btnSpeichern: '💾 Opslaan',
     btnLaden: '📂 Openen',
@@ -5496,6 +5518,8 @@ var I18N = {
     btnDesign: '🎨 Motyw',
     tipDesign: 'Światy barw, każdy w trzech odsłonach',
     btnAnleitung: '? Pomoc',
+    btnInstallieren: '📲 Zainstaluj',
+    msgInstalliert: '📲 Zainstalowano jako aplikację.',
     btnDatei: '📁 Plik ▾',
     btnSpeichern: '💾 Zapisz',
     btnLaden: '📂 Wczytaj',
@@ -6079,6 +6103,8 @@ var I18N = {
     btnDesign: '🎨 Tema',
     tipDesign: 'Mundos de cor, cada um em três estilos',
     btnAnleitung: '? Guia',
+    btnInstallieren: '📲 Instalar',
+    msgInstalliert: '📲 Instalação concluída.',
     btnDatei: '📁 Arquivo ▾',
     btnSpeichern: '💾 Salvar',
     btnLaden: '📂 Abrir',
@@ -6635,6 +6661,8 @@ var I18N = {
     btnDesign: '🎨 Tasarım',
     tipDesign: 'Renk dünyaları, her biri üç stilde',
     btnAnleitung: '? Kılavuz',
+    btnInstallieren: '📲 Yükle',
+    msgInstalliert: '📲 Uygulama olarak yüklendi.',
     btnDatei: '📁 Dosya ▾',
     btnSpeichern: '💾 Kaydet',
     btnLaden: '📂 Aç',
@@ -7191,6 +7219,8 @@ var I18N = {
     btnDesign: '🎨 Дизайн',
     tipDesign: 'Цветовые миры, каждый в трёх стилях',
     btnAnleitung: '? Справка',
+    btnInstallieren: '📲 Установить',
+    msgInstalliert: '📲 Установлено как приложение.',
     btnDatei: '📁 Файл ▾',
     btnSpeichern: '💾 Сохранить',
     btnLaden: '📂 Открыть',
@@ -7774,6 +7804,8 @@ var I18N = {
     btnDesign: '🎨 रंग-रूप',
     tipDesign: 'रंग-दुनिया, हर एक तीन अंदाज़ में',
     btnAnleitung: '? मदद',
+    btnInstallieren: '📲 इंस्टॉल करें',
+    msgInstalliert: '📲 ऐप के रूप में इंस्टॉल हो गया।',
     btnDatei: '📁 फ़ाइल ▾',
     btnSpeichern: '💾 सहेजें',
     btnLaden: '📂 खोलें',
@@ -8330,6 +8362,8 @@ var I18N = {
     btnDesign: '🎨 配色',
     tipDesign: '各种配色，每种有三种风格',
     btnAnleitung: '? 说明',
+    btnInstallieren: '📲 安装',
+    msgInstalliert: '📲 已作为应用安装。',
     btnDatei: '📁 文件 ▾',
     btnSpeichern: '💾 保存',
     btnLaden: '📂 打开',
@@ -8886,6 +8920,8 @@ var I18N = {
     btnDesign: '🎨 配色',
     tipDesign: '配色、それぞれ3つのスタイル',
     btnAnleitung: '? 使い方',
+    btnInstallieren: '📲 インストール',
+    msgInstalliert: '📲 アプリとしてインストールしました。',
     btnDatei: '📁 ファイル ▾',
     btnSpeichern: '💾 保存',
     btnLaden: '📂 開く',
@@ -9442,6 +9478,8 @@ var I18N = {
     btnDesign: '🎨 디자인',
     tipDesign: '색 테마, 하나하나가 세 가지 스타일',
     btnAnleitung: '? 설명서',
+    btnInstallieren: '📲 설치',
+    msgInstalliert: '📲 앱으로 설치되었습니다.',
     btnDatei: '📁 파일 ▾',
     btnSpeichern: '💾 저장',
     btnLaden: '📂 불러오기',
@@ -12558,6 +12596,32 @@ var i18n = (function () {
     var t = $('toast'); t.textContent = msg; t.classList.add('show');
     clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3600);
   }
+  // Knopf „Installieren“: erscheint erst, wenn der Browser die Installation anbietet (das Ereignis
+  // hebt das Skript im Kopf auf), und oeffnet dann dessen Installationsdialog. Ein Ereignis reicht
+  // fuer einen Dialog; nach einem Abbruch kommt der Knopf wieder, sobald der Browser ein neues
+  // schickt. In der installierten App bleibt er weg.
+  (function installKnopf() {
+    var btn = $('installBtn');
+    if (!btn) return;
+    function alsApp() {
+      return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    }
+    function zeigen() { btn.hidden = !window.deferredInstall || alsApp(); }
+    window.onInstallReady = zeigen;
+    btn.addEventListener('click', function () {
+      var evt = window.deferredInstall;
+      window.deferredInstall = null;
+      zeigen();
+      if (!evt) return;
+      try { var p = evt.prompt(); if (p && p.catch) p.catch(function () {}); } catch (e) { /* kein Dialog verfuegbar */ }
+    });
+    window.addEventListener('appinstalled', function () {
+      window.deferredInstall = null;
+      zeigen();
+      toast(i18n.t('msgInstalliert'));
+    });
+    zeigen();
+  })();
   $('helpBtn').addEventListener('click', function () { $('helpModal').classList.toggle('open'); });
   $('helpClose').addEventListener('click', function () { $('helpModal').classList.remove('open'); });
 
