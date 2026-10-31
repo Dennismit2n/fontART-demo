@@ -19,6 +19,12 @@
      beforeinstallprompt, manchmal bevor das grosse App-Skript laeuft. Das Ereignis bleibt hier
      liegen, bis der Knopf es abholt (app.js, installKnopf). -->
 <script>window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.deferredInstall=e;if(window.onInstallReady)window.onInstallReady();});</script>
+<!-- Sehhilfen der Werkstatt (31.10.2026): Hoher Kontrast, Farbenblind und Umgekehrte Farben
+     gelten in allen Werkzeugen (werkstatt.darstellung, roher Text) und stehen hier schon vor dem
+     ersten Bild fest. Hell, Dunkel und System der anderen Werkzeuge zeigen in fontART das
+     gewaehlte Design, die Farbwelten bleiben eine eigene Wahl. Dieselbe Aufloesung steht in
+     app.js (sehhilfe). -->
+<script>(function(){var v=null,r=document.documentElement,m=window.matchMedia;try{v=localStorage.getItem('werkstatt.darstellung');}catch(e){}var d=!!(m&&m('(prefers-color-scheme: dark)').matches),k=!!(m&&m('(prefers-contrast: more)').matches);if(v==='hc-dark'||v==='hc-light'){r.setAttribute('data-vision','contrast');r.setAttribute('data-hc',v.slice(3));}else if(v==='cvd-dark'||v==='cvd-light'){r.setAttribute('data-vision','cvd');}else if(v==='invert'){r.setAttribute('data-vision','invert');}else if(k&&(!v||v==='system')){r.setAttribute('data-vision','contrast');r.setAttribute('data-hc',d?'dark':'light');}})();</script>
 <title>fontART Designer — Testversion zum Ausprobieren</title>
 <!-- Link-Vorschau. Nur die Web-Fassung braucht sie: Die exe wird nicht
      verlinkt, sondern heruntergeladen. Das Bild liegt daneben im Repo und
@@ -453,6 +459,60 @@
   @media (max-width: 900px) {
     #installBtn { order: -1; }
   }
+  /* Sehhilfen der Werkstatt (31.10.2026): Hoher Kontrast, Farbenblind, Umgekehrte Farben.
+     Eine Wahl fuer alle Werkzeuge der Werkstatt (werkstatt.darstellung, siehe app.js,
+     sehhilfe). Die Farbwelten setzt app.js als Inline-Stil an <html> (applyTheme); die
+     Sehhilfen halten deshalb mit !important dagegen. data-hc traegt dunkel oder hell. */
+  .sehhilfe { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--dim); }
+  .sehhilfe label { font-weight: 700; color: var(--ink); }
+  /* Hoher Kontrast dunkel: Schwarz, Schrift #E0E0E0 (15,91:1), Farben auf 7:1 */
+  :root[data-vision="contrast"][data-hc="dark"] {
+    --bg: #000000 !important; --bg2: #000000 !important; --panel: #000000 !important; --panel2: #121212 !important;
+    --line: #a0a0a0 !important; --ink: #e0e0e0 !important; --dim: #c4c4c4 !important;
+    --accent: #eac54f !important; --accent2: #f6d878 !important; --lav: #a298de !important; --pink: #f776a8 !important;
+    --good: #7bc86c !important; --danger: #ec8469 !important;
+    --auf-akzent: #000000;
+  }
+  /* Hoher Kontrast hell: Weiss, Schrift Schwarz, Farben auf 7:1 nachgedunkelt */
+  :root[data-vision="contrast"][data-hc="light"] {
+    --bg: #ffffff !important; --bg2: #ffffff !important; --panel: #ffffff !important; --panel2: #efefef !important;
+    --line: #585757 !important; --ink: #000000 !important; --dim: #2b2b2b !important;
+    --accent: #604c00 !important; --accent2: #5f4c00 !important; --lav: #514584 !important; --pink: #951755 !important;
+    --good: #155b00 !important; --danger: #8d2e14 !important;
+    --auf-akzent: #ffffff;
+  }
+  /* Feste Farben aus dem Grundgeruest: Verlaeufe und Leuchten weg, Schrift in Schriftfarbe */
+  html[data-vision="contrast"], html[data-vision="contrast"] body { background: var(--bg); }
+  :root[data-vision="contrast"] header { background: var(--panel); }
+  :root[data-vision="contrast"] :is(header input#fontName, .previewbar input, #kernPair) { color: var(--ink); }
+  :root[data-vision="contrast"] :is(.hbtn.primary, .logo .dot) { background: var(--accent); color: var(--auf-akzent); box-shadow: none; filter: none; }
+  :root[data-vision="contrast"] .tool.on { color: var(--auf-akzent); }
+  :root[data-vision="contrast"] .gbtn.active { background: var(--panel2); }
+  :root[data-vision="contrast"] :is(.spacenote, .demo-hinweis) { background: var(--panel2); border-color: var(--line); }
+  :root[data-vision="contrast"] .demo-hinweis a { color: var(--accent); }
+  :root[data-vision="contrast"] :is(.demo-uhr, .demo-uhr.aus, .demo-uhr.knapp) { background: var(--panel2); border-color: var(--pink); color: var(--ink); animation: none; }
+  :root[data-vision="contrast"] #toast { background: var(--panel2); border: 1px solid var(--line); color: var(--ink); box-shadow: none; }
+  :root[data-vision="contrast"] :is(.modal p, .modal li) { color: var(--ink); }
+  :root[data-vision="contrast"] .cmcell.cur { outline-color: var(--accent); }
+  :root[data-vision="contrast"] .vcell .vtag { color: #4f3fa0; }
+  :root[data-vision="contrast"] #pad { box-shadow: 0 0 0 2px var(--line); }
+  :root[data-vision="contrast"] :is(#penLockBtn, #penLockBtn.on) { box-shadow: none; animation: none; }
+  :root[data-vision="contrast"] #penLockBtn { border-color: var(--good); }
+  :root[data-vision="contrast"] #penLockBtn.on { border-color: var(--pink); background: var(--panel2); }
+  :root[data-vision="contrast"] aside.left .grp-title { opacity: 1; }
+  /* Farbenblind: Fertig und Gefahr in Himmelblau und Orange (Okabe-Ito) statt Gruen und Rot.
+     Die Farbwelten selbst bleiben, sie tragen keine Bedeutung. */
+  :root[data-vision="cvd"] { --good: #56b4e9 !important; --danger: #e8743a !important; }
+  /* Umgekehrte Farben wie der Farbfilter von Windows: Das ganze Bild dreht sich um,
+     auch das Malblatt (es ist die eigene Zeichnung, kein Foto). */
+  :root[data-vision="invert"] { filter: invert(1); }
+  :root[data-vision="invert"] aside.left .grp-title { opacity: 1; }
+  /* Kontrast nach dem Umdrehen: Pink und Gefahr aus Classic fielen umgedreht unter 4,5:1
+     und werden dafuer heller angesetzt. Die anderen Farbwelten bleiben, wie gewaehlt. */
+  :root[data-vision="invert"]:is(:not([data-design]), [data-design="classic"]) { --pink: #ff89b5 !important; --danger: #ff8f75 !important; }
+  @media print {
+    :root[data-vision="invert"] { filter: none; }
+  }
   </style>
 </head>
 <body>
@@ -640,6 +700,8 @@
       <div class="v8head"><b data-i18n="dlgDesignTitel">🎨 Design wählen</b>
         <select id="themeStyle" style="width:auto"><option value="dunkel" data-i18n="dlgStilDunkel">dunkel</option><option value="hell" data-i18n="dlgStilHell">hell</option><option value="neon" data-i18n="dlgStilNeon">neon</option></select>
         <button class="rbtn" id="themeClose">✕</button></div>
+      <div class="sehhilfe"><label for="visionSel" data-i18n="dlgDarstellung">Darstellung</label>
+        <select id="visionSel"><option value="normal" data-i18n="dlgDarstNormal">Normal</option><option value="hc-dark" data-i18n="dlgDarstHcDunkel">Hoher Kontrast dunkel</option><option value="hc-light" data-i18n="dlgDarstHcHell">Hoher Kontrast hell</option><option value="cvd" data-i18n="dlgDarstFarbenblind">Farbenblind</option><option value="invert" data-i18n="dlgDarstUmkehr">Umgekehrte Farben</option></select></div>
       <div id="themeGrid"></div>
     </div>
   </div>
@@ -2171,6 +2233,12 @@ var I18N = {
     btnAnleitung: '? Anleitung',
     btnInstallieren: '📲 Installieren',
     msgInstalliert: '📲 Als App installiert.',
+    dlgDarstellung: 'Darstellung',
+    dlgDarstNormal: 'Normal',
+    dlgDarstHcDunkel: 'Hoher Kontrast dunkel',
+    dlgDarstHcHell: 'Hoher Kontrast hell',
+    dlgDarstFarbenblind: 'Farbenblind',
+    dlgDarstUmkehr: 'Umgekehrte Farben',
     btnDatei: '📁 Datei ▾',
     btnSpeichern: '💾 Speichern',
     btnLaden: '📂 Laden',
@@ -2730,6 +2798,12 @@ var I18N = {
     btnAnleitung: '? Guide',
     btnInstallieren: '📲 Install',
     msgInstalliert: '📲 Installed as an app.',
+    dlgDarstellung: 'Appearance',
+    dlgDarstNormal: 'Normal',
+    dlgDarstHcDunkel: 'High contrast dark',
+    dlgDarstHcHell: 'High contrast light',
+    dlgDarstFarbenblind: 'Color-blind',
+    dlgDarstUmkehr: 'Inverted colors',
     btnDatei: '📁 File ▾',
     btnSpeichern: '💾 Save',
     btnLaden: '📂 Load',
@@ -3288,6 +3362,12 @@ var I18N = {
     btnAnleitung: '? Guía',
     btnInstallieren: '📲 Instalar',
     msgInstalliert: '📲 Instalación completada.',
+    dlgDarstellung: 'Apariencia',
+    dlgDarstNormal: 'Normal',
+    dlgDarstHcDunkel: 'Alto contraste oscuro',
+    dlgDarstHcHell: 'Alto contraste claro',
+    dlgDarstFarbenblind: 'Daltónico',
+    dlgDarstUmkehr: 'Colores invertidos',
     btnDatei: '📁 Archivo ▾',
     btnSpeichern: '💾 Guardar',
     btnLaden: '📂 Cargar',
@@ -3846,6 +3926,12 @@ var I18N = {
     btnAnleitung: '? Guide',
     btnInstallieren: '📲 Installer',
     msgInstalliert: '📲 Installation terminée.',
+    dlgDarstellung: 'Apparence',
+    dlgDarstNormal: 'Normal',
+    dlgDarstHcDunkel: 'Contraste élevé sombre',
+    dlgDarstHcHell: 'Contraste élevé clair',
+    dlgDarstFarbenblind: 'Daltonien',
+    dlgDarstUmkehr: 'Couleurs inversées',
     btnDatei: '📁 Fichier ▾',
     btnSpeichern: '💾 Enregistrer',
     btnLaden: '📂 Ouvrir',
@@ -4404,6 +4490,12 @@ var I18N = {
     btnAnleitung: '? Guida',
     btnInstallieren: '📲 Installa',
     msgInstalliert: '📲 Installazione completata.',
+    dlgDarstellung: 'Aspetto',
+    dlgDarstNormal: 'Normale',
+    dlgDarstHcDunkel: 'Contrasto elevato scuro',
+    dlgDarstHcHell: 'Contrasto elevato chiaro',
+    dlgDarstFarbenblind: 'Daltonico',
+    dlgDarstUmkehr: 'Colori invertiti',
     btnDatei: '📁 File ▾',
     btnSpeichern: '💾 Salva',
     btnLaden: '📂 Apri',
@@ -4962,6 +5054,12 @@ var I18N = {
     btnAnleitung: '? Handleiding',
     btnInstallieren: '📲 Installeren',
     msgInstalliert: '📲 Als app geïnstalleerd.',
+    dlgDarstellung: 'Weergave',
+    dlgDarstNormal: 'Normaal',
+    dlgDarstHcDunkel: 'Hoog contrast donker',
+    dlgDarstHcHell: 'Hoog contrast licht',
+    dlgDarstFarbenblind: 'Kleurenblind',
+    dlgDarstUmkehr: 'Omgekeerde kleuren',
     btnDatei: '📁 Bestand ▾',
     btnSpeichern: '💾 Opslaan',
     btnLaden: '📂 Openen',
@@ -5520,6 +5618,12 @@ var I18N = {
     btnAnleitung: '? Pomoc',
     btnInstallieren: '📲 Zainstaluj',
     msgInstalliert: '📲 Zainstalowano jako aplikację.',
+    dlgDarstellung: 'Wygląd',
+    dlgDarstNormal: 'Zwykły',
+    dlgDarstHcDunkel: 'Wysoki kontrast, ciemny',
+    dlgDarstHcHell: 'Wysoki kontrast, jasny',
+    dlgDarstFarbenblind: 'Dla daltonistów',
+    dlgDarstUmkehr: 'Odwrócone kolory',
     btnDatei: '📁 Plik ▾',
     btnSpeichern: '💾 Zapisz',
     btnLaden: '📂 Wczytaj',
@@ -6105,6 +6209,12 @@ var I18N = {
     btnAnleitung: '? Guia',
     btnInstallieren: '📲 Instalar',
     msgInstalliert: '📲 Instalação concluída.',
+    dlgDarstellung: 'Aparência',
+    dlgDarstNormal: 'Normal',
+    dlgDarstHcDunkel: 'Alto contraste escuro',
+    dlgDarstHcHell: 'Alto contraste claro',
+    dlgDarstFarbenblind: 'Daltônico',
+    dlgDarstUmkehr: 'Cores invertidas',
     btnDatei: '📁 Arquivo ▾',
     btnSpeichern: '💾 Salvar',
     btnLaden: '📂 Abrir',
@@ -6663,6 +6773,12 @@ var I18N = {
     btnAnleitung: '? Kılavuz',
     btnInstallieren: '📲 Yükle',
     msgInstalliert: '📲 Uygulama olarak yüklendi.',
+    dlgDarstellung: 'Görünüm',
+    dlgDarstNormal: 'Normal',
+    dlgDarstHcDunkel: 'Yüksek karşıtlık koyu',
+    dlgDarstHcHell: 'Yüksek karşıtlık açık',
+    dlgDarstFarbenblind: 'Renk körü',
+    dlgDarstUmkehr: 'Ters renkler',
     btnDatei: '📁 Dosya ▾',
     btnSpeichern: '💾 Kaydet',
     btnLaden: '📂 Aç',
@@ -7221,6 +7337,12 @@ var I18N = {
     btnAnleitung: '? Справка',
     btnInstallieren: '📲 Установить',
     msgInstalliert: '📲 Установлено как приложение.',
+    dlgDarstellung: 'Оформление',
+    dlgDarstNormal: 'Обычная',
+    dlgDarstHcDunkel: 'Контрастная тёмная',
+    dlgDarstHcHell: 'Контрастная светлая',
+    dlgDarstFarbenblind: 'Для дальтоников',
+    dlgDarstUmkehr: 'Инверсия цветов',
     btnDatei: '📁 Файл ▾',
     btnSpeichern: '💾 Сохранить',
     btnLaden: '📂 Открыть',
@@ -7806,6 +7928,12 @@ var I18N = {
     btnAnleitung: '? मदद',
     btnInstallieren: '📲 इंस्टॉल करें',
     msgInstalliert: '📲 ऐप के रूप में इंस्टॉल हो गया।',
+    dlgDarstellung: 'थीम',
+    dlgDarstNormal: 'सामान्य',
+    dlgDarstHcDunkel: 'उच्च कंट्रास्ट गहरी',
+    dlgDarstHcHell: 'उच्च कंट्रास्ट हल्की',
+    dlgDarstFarbenblind: 'रंगांधता-अनुकूल',
+    dlgDarstUmkehr: 'उलटे रंग',
     btnDatei: '📁 फ़ाइल ▾',
     btnSpeichern: '💾 सहेजें',
     btnLaden: '📂 खोलें',
@@ -8364,6 +8492,12 @@ var I18N = {
     btnAnleitung: '? 说明',
     btnInstallieren: '📲 安装',
     msgInstalliert: '📲 已作为应用安装。',
+    dlgDarstellung: '外观',
+    dlgDarstNormal: '常规',
+    dlgDarstHcDunkel: '高对比度深色',
+    dlgDarstHcHell: '高对比度浅色',
+    dlgDarstFarbenblind: '色盲友好',
+    dlgDarstUmkehr: '反转颜色',
     btnDatei: '📁 文件 ▾',
     btnSpeichern: '💾 保存',
     btnLaden: '📂 打开',
@@ -8922,6 +9056,12 @@ var I18N = {
     btnAnleitung: '? 使い方',
     btnInstallieren: '📲 インストール',
     msgInstalliert: '📲 アプリとしてインストールしました。',
+    dlgDarstellung: '外観',
+    dlgDarstNormal: '標準',
+    dlgDarstHcDunkel: 'ハイコントラスト（ダーク）',
+    dlgDarstHcHell: 'ハイコントラスト（ライト）',
+    dlgDarstFarbenblind: '色覚サポート',
+    dlgDarstUmkehr: '色反転',
     btnDatei: '📁 ファイル ▾',
     btnSpeichern: '💾 保存',
     btnLaden: '📂 開く',
@@ -9480,6 +9620,12 @@ var I18N = {
     btnAnleitung: '? 설명서',
     btnInstallieren: '📲 설치',
     msgInstalliert: '📲 앱으로 설치되었습니다.',
+    dlgDarstellung: '테마',
+    dlgDarstNormal: '기본',
+    dlgDarstHcDunkel: '고대비 다크',
+    dlgDarstHcHell: '고대비 라이트',
+    dlgDarstFarbenblind: '색각 배려',
+    dlgDarstUmkehr: '색상 반전',
     btnDatei: '📁 파일 ▾',
     btnSpeichern: '💾 저장',
     btnLaden: '📂 불러오기',
@@ -11452,6 +11598,8 @@ var i18n = (function () {
     var vars = (i < 0) ? THEME_CLASSIC : themeVars(i, style);
     var root = document.documentElement.style;
     Object.keys(vars).forEach(function (k) { root.setProperty(k, vars[k]); });
+    // Fuer die Sehhilfe "Umgekehrte Farben": Classic bekommt dort nachgezogene Farben (template.html)
+    document.documentElement.setAttribute('data-design', i < 0 ? 'classic' : style);
     themeState = { i: i, style: style };
   }
   function renderThemes() {
@@ -12621,6 +12769,56 @@ var i18n = (function () {
       toast(i18n.t('msgInstalliert'));
     });
     zeigen();
+  })();
+  // ----- Sehhilfen der Werkstatt (31.10.2026) -------------------------------
+  // Hoher Kontrast, Farbenblind und Umgekehrte Farben gelten in allen Werkzeugen
+  // der Werkstatt (werkstatt.darstellung, roher Text). fontART zeigt dafuer im
+  // Design-Fenster ein Feld mit fuenf Eintraegen. Hell, Dunkel und System der
+  // anderen Werkzeuge stehen hier fuer "Normal": Die Farbwelten bleiben eine
+  // eigene Wahl. Farbenblind merkt sich hell oder dunkel nach dem Geraet, damit
+  // die anderen Werkzeuge passend weitermachen. Das Kopf-Skript in template.html
+  // setzt dieselben Attribute schon vor dem ersten Bild.
+  (function sehhilfe() {
+    var KEY = 'werkstatt.darstellung';
+    var sel = $('visionSel');
+    if (!sel) return;
+    function media(q) { return !!(window.matchMedia && window.matchMedia(q).matches); }
+    function gespeichert() { try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; } }
+    function eintrag(v) {
+      if (v === 'hc-dark' || v === 'hc-light' || v === 'invert') return v;
+      if (v === 'cvd-dark' || v === 'cvd-light') return 'cvd';
+      return 'normal';
+    }
+    function anwenden(v) {
+      var r = document.documentElement, hc = null;
+      r.removeAttribute('data-vision'); r.removeAttribute('data-hc');
+      if (v === 'hc-dark' || v === 'hc-light') hc = v.slice(3);
+      else if (v === 'system' && media('(prefers-contrast: more)')) hc = media('(prefers-color-scheme: dark)') ? 'dark' : 'light';
+      if (hc) { r.setAttribute('data-vision', 'contrast'); r.setAttribute('data-hc', hc); }
+      else if (v === 'cvd-dark' || v === 'cvd-light') r.setAttribute('data-vision', 'cvd');
+      else if (v === 'invert') r.setAttribute('data-vision', 'invert');
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = hc === 'light' ? '#ffffff' : (hc === 'dark' ? '#000000' : '#0e0c16');
+    }
+    function nochmal() { var v = gespeichert(); anwenden(v); sel.value = eintrag(v); }
+    sel.addEventListener('change', function () {
+      var w = sel.value, jetzt = gespeichert(), neu = w;
+      if (w === 'normal') neu = eintrag(jetzt) === 'normal' ? jetzt : 'system';
+      else if (w === 'cvd') neu = eintrag(jetzt) === 'cvd' ? jetzt : (media('(prefers-color-scheme: dark)') ? 'cvd-dark' : 'cvd-light');
+      try { localStorage.setItem(KEY, neu); } catch (e) { /* Speicher gesperrt: gilt bis zum Neuladen */ }
+      anwenden(neu);
+    });
+    // "System" folgt dem Geraet live, auch bei "Kontrast erhoehen"; eine Wahl in
+    // einem anderen Werkzeug-Tab oder vor dem Zurueckblaettern gilt sofort
+    ['(prefers-color-scheme: dark)', '(prefers-contrast: more)'].forEach(function (q) {
+      if (!window.matchMedia) return;
+      var l = window.matchMedia(q);
+      var folgen = function () { anwenden(gespeichert()); };
+      if (l.addEventListener) l.addEventListener('change', folgen); else if (l.addListener) l.addListener(folgen);
+    });
+    window.addEventListener('storage', function (e) { if (e.key === KEY) nochmal(); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) nochmal(); });
+    nochmal();
   })();
   $('helpBtn').addEventListener('click', function () { $('helpModal').classList.toggle('open'); });
   $('helpClose').addEventListener('click', function () { $('helpModal').classList.remove('open'); });
