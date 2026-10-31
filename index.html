@@ -245,6 +245,11 @@
   [data-design="hell"] .gbtn.active{background:var(--panel2)}
   [data-design="hell"] #toast{background:var(--panel2)}
   [data-design="hell"] .spacenote{background:var(--bg);border-color:var(--line)}
+  /* Dunkel und Neon (31.10.2026): Rot hielt auf --panel2 (Kerning-Liste) in 22 dunklen Farbwelten keine
+     4,5:1 und ist einheitlich so viel heller, wie die schwaechste braucht. Das weisse Kreuz zum Loeschen
+     einer Alternate stand auf Pink mit 1,1 bis 2,6:1 (auch Classic), es ist ausser im hellen Stil dunkel. */
+  :root[data-design="dunkel"],:root[data-design="neon"]{--danger:#e5917b}
+  :root:not([data-design="hell"]) .vcell .vdel{color:var(--bg)}
   /* Demo-Edition: gesperrte Bedienelemente bleiben sichtbar, aber blass. */
   .demo-gesperrt{opacity:.40;filter:grayscale(1);cursor:not-allowed!important}
   label.demo-gesperrt{opacity:.40;filter:grayscale(1)}
@@ -526,6 +531,8 @@
   :root[data-vision="cvd"] { --good: #56b4e9 !important; --danger: #e8743a !important; }
   /* Im hellen Stil stehen beide auf hellem Grund: gleiche Farbtoene, so dunkel wie fuer 4,5:1 noetig */
   :root[data-vision="cvd"][data-design="hell"] { --good: #136390 !important; --danger: #8e3a11 !important; }
+  /* In Dunkel und Neon ist das Orange auf --panel2 zu dunkel: so viel heller wie fuer 4,5:1 noetig */
+  :root[data-vision="cvd"]:is([data-design="dunkel"], [data-design="neon"]) { --danger: #ec8e5f !important; }
   /* Umgekehrte Farben wie der Farbfilter von Windows: Das ganze Bild dreht sich um,
      auch das Malblatt (es ist die eigene Zeichnung, kein Foto). */
   :root[data-vision="invert"] { filter: invert(1); }
@@ -11645,6 +11652,15 @@ var i18n = (function () {
       nachruecken('--accent', [rgb('--panel2')], -1, 0.9);
       nachruecken('--accent2', [rgb('--panel2')], -1);
       nachruecken('--pink', [rgb('--panel')], -1);
+    } else {
+      // Im Dunkeln dasselbe, nur heller: Blau und Violett haben wenig Leuchtdichte. In Neon hielt dort
+      // sogar die Grundschrift nur 3,5:1, Akzent in 21 dunklen und 17 Neon-Farbwelten keine 4,5:1. Die
+      // Grundschrift steht auch auf den festen Flaechen von Meldung (#252038) und gewaehltem Zeichen
+      // (#241d3a), --accent2 auf dem Leerzeichen-Hinweis (#262045, alle drei in template.html).
+      nachruecken('--ink', [rgb('--panel2'), [0x25, 0x20, 0x38], [0x24, 0x1d, 0x3a]], 1);
+      nachruecken('--accent', [rgb('--panel2')], 1, 0.9);
+      nachruecken('--accent2', [rgb('--panel2'), [0x26, 0x20, 0x45]], 1);
+      nachruecken('--pink', [rgb('--panel')], 1);
     }
     return v;
   }
