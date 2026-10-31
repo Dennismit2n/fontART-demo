@@ -233,6 +233,18 @@
     .dnalab{font-size:12px;font-weight:700;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .rbar{height:10px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden}
     .rfill{height:100%;background:linear-gradient(90deg,var(--pink),var(--accent));border-radius:6px}
+  /* Heller Stil (31.10.2026): Das Grundgeruest hat feste Dunkel-Farben. Im hellen Stil trafen sie
+     auf helle Flaechen, teils mit 1,0:1 - Kopfzeile, Eingabefelder, Fliesstext der Fenster,
+     Meldung, gewaehltes Zeichen, Leerzeichen-Hinweis. Hier bekommen sie Flaechen und Schrift aus
+     der Farbwelt, Gruen und Rot so dunkel wie fuer 4,5:1 noetig. data-design setzt applyTheme
+     (app.js); dunkel, neon und Classic beruehrt das nicht. */
+  :root[data-design="hell"]{--good:#336c28;--danger:#96361d}
+  [data-design="hell"] header{background:linear-gradient(var(--bg2),var(--panel))}
+  [data-design="hell"] header input#fontName,[data-design="hell"] .previewbar input,[data-design="hell"] #kernPair{color:var(--ink)}
+  [data-design="hell"] .modal p,[data-design="hell"] .modal li{color:var(--ink)}
+  [data-design="hell"] .gbtn.active{background:var(--panel2)}
+  [data-design="hell"] #toast{background:var(--panel2)}
+  [data-design="hell"] .spacenote{background:var(--bg);border-color:var(--line)}
   /* Demo-Edition: gesperrte Bedienelemente bleiben sichtbar, aber blass. */
   .demo-gesperrt{opacity:.40;filter:grayscale(1);cursor:not-allowed!important}
   label.demo-gesperrt{opacity:.40;filter:grayscale(1)}
@@ -510,6 +522,8 @@
   /* Farbenblind: Fertig und Gefahr in Himmelblau und Orange (Okabe-Ito) statt Gruen und Rot.
      Die Farbwelten selbst bleiben, sie tragen keine Bedeutung. */
   :root[data-vision="cvd"] { --good: #56b4e9 !important; --danger: #e8743a !important; }
+  /* Im hellen Stil stehen beide auf hellem Grund: gleiche Farbtoene, so dunkel wie fuer 4,5:1 noetig */
+  :root[data-vision="cvd"][data-design="hell"] { --good: #136390 !important; --danger: #8e3a11 !important; }
   /* Umgekehrte Farben wie der Farbfilter von Windows: Das ganze Bild dreht sich um,
      auch das Malblatt (es ist die eigene Zeichnung, kein Foto). */
   :root[data-vision="invert"] { filter: invert(1); }
@@ -11601,19 +11615,35 @@ var i18n = (function () {
   // der fest dunklen Kopfzeile (Verlauf #171326 -> #120f1e in template.html). In 57 der 126
   // Farbwelten hielt sie dort keine 4,5:1. Gleicher Farbton, nur die Helligkeit wandert, und
   // nur so weit wie noetig: im Dunkeln heller, im Hellen dunkler (31.10.2026). Im hellen Stil
-  // passt die Kopfzeile selbst nicht zur Farbwelt, das ist eine eigene Baustelle.
+  // hat die Kopfzeile die Flaechen der Farbwelt, --bg2 -> --panel (template.html, data-design).
+  // Dort gilt dasselbe fuer die Akzentschrift: --accent, --accent2 und --pink hielten in 35, 20
+  // und 32 der 42 hellen Farbwelten keine 4,5:1, bis hinunter zu 1,5:1. --accent steht auch zu
+  // 90 % deckend auf --panel2 (Zeichentabelle), --accent2 auf --panel2 (Kerning-Liste), --pink
+  // auf --panel (Ueberschriften in den Fenstern). Hellere Flaechen halten dann von selbst.
   function themeVars(i, style) {
     var v = themeGrund(i, style);
     function zahlen(css) { return css.match(/\d+/g).map(Number); }   // hsl(h,s%,l%)
-    var d = zahlen(v['--dim']), schritt = style === 'hell' ? -1 : 1;
-    var flaechen = [v['--panel'], v['--bg2']].map(function (c) { return hslRgb.apply(null, zahlen(c)); });
-    if (style !== 'hell') flaechen.push([0x17, 0x13, 0x26], [0x12, 0x0f, 0x1e]);
-    function haelt() {
-      var s = hslRgb(d[0], d[1], d[2]);
-      return flaechen.every(function (f) { return kontrast(s, f) >= 4.5; });
+    function nachruecken(name, flaechen, schritt, deckkraft) {
+      var d = zahlen(v[name]);
+      function haelt() {
+        var s = hslRgb(d[0], d[1], d[2]);
+        return flaechen.every(function (f) {
+          var m = deckkraft ? s.map(function (x, k) { return x * deckkraft + f[k] * (1 - deckkraft); }) : s;
+          return kontrast(m, f) >= 4.5;
+        });
+      }
+      while (!haelt() && d[2] > 0 && d[2] < 100) d[2] += schritt;
+      v[name] = hslc(d[0], d[1], d[2]);
     }
-    while (!haelt() && d[2] > 0 && d[2] < 100) d[2] += schritt;
-    v['--dim'] = hslc(d[0], d[1], d[2]);
+    function rgb(name) { return hslRgb.apply(null, zahlen(v[name])); }
+    var flaechen = [rgb('--panel'), rgb('--bg2')];
+    if (style !== 'hell') flaechen.push([0x17, 0x13, 0x26], [0x12, 0x0f, 0x1e]);
+    nachruecken('--dim', flaechen, style === 'hell' ? -1 : 1);
+    if (style === 'hell') {
+      nachruecken('--accent', [rgb('--panel2')], -1, 0.9);
+      nachruecken('--accent2', [rgb('--panel2')], -1);
+      nachruecken('--pink', [rgb('--panel')], -1);
+    }
     return v;
   }
   function themeGrund(i, style) {
@@ -11641,7 +11671,8 @@ var i18n = (function () {
     var vars = (i < 0) ? THEME_CLASSIC : themeVars(i, style);
     var root = document.documentElement.style;
     Object.keys(vars).forEach(function (k) { root.setProperty(k, vars[k]); });
-    // Fuer die Sehhilfe "Umgekehrte Farben": Classic bekommt dort nachgezogene Farben (template.html)
+    // Der helle Stil bekommt eigene Flaechen fuer die festen Dunkel-Farben des Grundgeruests
+    // (template.html). In der Web-Fassung zieht die Sehhilfe "Umgekehrte Farben" damit Classic nach.
     document.documentElement.setAttribute('data-design', i < 0 ? 'classic' : style);
     // Gruppentitel am Handy: so wenig Deckkraft wie moeglich, aber 4,5:1 (siehe grpDeckkraft)
     root.setProperty('--grp-alpha', String(grpDeckkraft(vars['--dim'], vars['--panel'])));
