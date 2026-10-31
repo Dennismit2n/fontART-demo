@@ -306,7 +306,9 @@
       flex: none;
       margin: 0 2px;
       font-size: 10px;
-      opacity: .65;
+      /* Deckkraft je Farbwelt aus app.js (grpDeckkraft): so blass wie moeglich bei
+         4,5:1. 0,73 ist der Wert fuer Classic, mit dem die Seite startet. */
+      opacity: var(--grp-alpha, .73);
       writing-mode: vertical-rl;
       max-height: 44px;
     }
@@ -459,6 +461,11 @@
   @media (max-width: 900px) {
     #installBtn { order: -1; }
   }
+  /* Schliessen-Knopf in den Fensterkoepfen: .rbtn ist eine Leistenknopf-Klasse mit
+     width:100%. Im Kopf zog sich das Kreuz dadurch ueber die ganze freie Breite und
+     drueckte den Titel im Design-Fenster in drei Zeilen. Hier so breit wie sein
+     Inhalt, fuer den Finger mindestens 44px. */
+  .v8head > .rbtn { width: auto; min-width: 44px; flex: none; }
   /* Sehhilfen der Werkstatt (31.10.2026): Hoher Kontrast, Farbenblind, Umgekehrte Farben.
      Eine Wahl fuer alle Werkzeuge der Werkstatt (werkstatt.darstellung, siehe app.js,
      sehhilfe). Die Farbwelten setzt app.js als Inline-Stil an <html> (applyTheme); die
@@ -11600,6 +11607,8 @@ var i18n = (function () {
     Object.keys(vars).forEach(function (k) { root.setProperty(k, vars[k]); });
     // Fuer die Sehhilfe "Umgekehrte Farben": Classic bekommt dort nachgezogene Farben (template.html)
     document.documentElement.setAttribute('data-design', i < 0 ? 'classic' : style);
+    // Gruppentitel am Handy: so wenig Deckkraft wie moeglich, aber 4,5:1 (siehe grpDeckkraft)
+    root.setProperty('--grp-alpha', String(grpDeckkraft(vars['--dim'], vars['--panel'])));
     themeState = { i: i, style: style };
   }
   function renderThemes() {
@@ -12820,6 +12829,31 @@ var i18n = (function () {
     window.addEventListener('pageshow', function (e) { if (e.persisted) nochmal(); });
     nochmal();
   })();
+  // Gruppentitel am Handy (template.html): Ihre Farbe ist --dim der Farbwelt, gedaempft
+  // ueber die Deckkraft. Gesucht ist die kleinste Deckkraft ab 0,65, bei der die Schrift
+  // auf --panel noch 4,5:1 haelt (Classic: 0,73). Schafft --dim das auch voll nicht, wie
+  // in 57 der 126 erzeugten Farbwelten, bleibt es bei voller Deckkraft.
+  function grpDeckkraft(dim, panel) {
+    var g = document.createElement('canvas').getContext('2d');
+    function rgb(css) {
+      g.fillStyle = '#000'; g.fillStyle = css;
+      var h = g.fillStyle;   // der Browser liefert #rrggbb, auch fuer hsl()
+      return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16) / 255; });
+    }
+    function lum(p) {
+      var l = p.map(function (v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+      return 0.2126 * l[0] + 0.7152 * l[1] + 0.0722 * l[2];
+    }
+    var d = rgb(dim), p = rgb(panel), lp = lum(p);
+    function haelt(lm) { return (Math.max(lm, lp) + 0.05) / (Math.min(lm, lp) + 0.05) >= 4.5; }
+    for (var a = 65; a < 100; a++) {
+      // gemischt in sRGB, einmal genau und einmal auf ganze Stufen gerundet wie
+      // beim Zeichnen: Beides muss halten, sonst landet es knapp bei 4,49
+      var m = d.map(function (v, i) { return v * a / 100 + p[i] * (1 - a / 100); });
+      if (haelt(lum(m)) && haelt(lum(m.map(function (v) { return Math.round(v * 255) / 255; })))) return a / 100;
+    }
+    return 1;
+  }
   $('helpBtn').addEventListener('click', function () { $('helpModal').classList.toggle('open'); });
   $('helpClose').addEventListener('click', function () { $('helpModal').classList.remove('open'); });
 
