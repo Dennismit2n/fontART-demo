@@ -513,6 +513,8 @@
   :root[data-vision="contrast"] #toast { background: var(--panel2); border: 1px solid var(--line); color: var(--ink); box-shadow: none; }
   :root[data-vision="contrast"] :is(.modal p, .modal li) { color: var(--ink); }
   :root[data-vision="contrast"] .cmcell.cur { outline-color: var(--accent); }
+  /* Zaehlbuchstaben der Zeichentabelle: zu 90 % deckend hielten sie im hellen Hohen Kontrast nur 5,67:1 */
+  :root[data-vision="contrast"] .cmcell span { opacity: 1; }
   :root[data-vision="contrast"] .vcell .vtag { color: #4f3fa0; }
   :root[data-vision="contrast"] #pad { box-shadow: 0 0 0 2px var(--line); }
   :root[data-vision="contrast"] :is(#penLockBtn, #penLockBtn.on) { box-shadow: none; animation: none; }
