@@ -11580,7 +11580,43 @@ var i18n = (function () {
   var THEME_NAMES = ['design01', 'design02', 'design03', 'design04', 'design05', 'design06', 'design07', 'design08', 'design09', 'design10', 'design11', 'design12', 'design13', 'design14', 'design15', 'design16', 'design17', 'design18', 'design19', 'design20', 'design21', 'design22', 'design23', 'design24', 'design25', 'design26', 'design27', 'design28', 'design29', 'design30', 'design31', 'design32', 'design33', 'design34', 'design35', 'design36', 'design37', 'design38', 'design39', 'design40', 'design41', 'design42'];
   var THEME_CLASSIC = { '--bg': '#0e0c16', '--bg2': '#141020', '--panel': '#171326', '--panel2': '#1f1b30', '--line': '#2e2a45', '--ink': '#eac54f', '--dim': '#b7a75f', '--accent': '#eac54f', '--accent2': '#f6d878', '--lav': '#8f84c9', '--pink': '#f776a8' };
   function hslc(h, sa, l) { return 'hsl(' + Math.round(((h % 360) + 360) % 360) + ',' + sa + '%,' + l + '%)'; }
+  // hsl -> rgb wie im Browser: Kanaele auf ganze Stufen 0-255 gerundet
+  function hslRgb(h, sa, l) {
+    sa /= 100; l /= 100;
+    var a = sa * Math.min(l, 1 - l);
+    return [0, 8, 4].map(function (n) {
+      var k = (n + h / 30) % 12;
+      return Math.round((l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))) * 255);
+    });
+  }
+  function kontrast(a, b) {   // WCAG 2, beide Farben als [r, g, b] 0-255
+    function lum(p) {
+      var c = p.map(function (v) { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    }
+    var x = lum(a), y = lum(b);
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  }
+  // Nebenschrift (--dim) steht auf --panel und --bg2, im dunklen und im Neon-Stil auch auf
+  // der fest dunklen Kopfzeile (Verlauf #171326 -> #120f1e in template.html). In 57 der 126
+  // Farbwelten hielt sie dort keine 4,5:1. Gleicher Farbton, nur die Helligkeit wandert, und
+  // nur so weit wie noetig: im Dunkeln heller, im Hellen dunkler (31.10.2026). Im hellen Stil
+  // passt die Kopfzeile selbst nicht zur Farbwelt, das ist eine eigene Baustelle.
   function themeVars(i, style) {
+    var v = themeGrund(i, style);
+    function zahlen(css) { return css.match(/\d+/g).map(Number); }   // hsl(h,s%,l%)
+    var d = zahlen(v['--dim']), schritt = style === 'hell' ? -1 : 1;
+    var flaechen = [v['--panel'], v['--bg2']].map(function (c) { return hslRgb.apply(null, zahlen(c)); });
+    if (style !== 'hell') flaechen.push([0x17, 0x13, 0x26], [0x12, 0x0f, 0x1e]);
+    function haelt() {
+      var s = hslRgb(d[0], d[1], d[2]);
+      return flaechen.every(function (f) { return kontrast(s, f) >= 4.5; });
+    }
+    while (!haelt() && d[2] > 0 && d[2] < 100) d[2] += schritt;
+    v['--dim'] = hslc(d[0], d[1], d[2]);
+    return v;
+  }
+  function themeGrund(i, style) {
     var h = (i * 137.508) % 360, hB = h + 42, h2 = h + 300;
     if (style === 'hell') return {
       '--bg': hslc(h, 30, 95), '--bg2': hslc(h, 28, 91), '--panel': hslc(h, 26, 88),
@@ -12831,8 +12867,8 @@ var i18n = (function () {
   })();
   // Gruppentitel am Handy (template.html): Ihre Farbe ist --dim der Farbwelt, gedaempft
   // ueber die Deckkraft. Gesucht ist die kleinste Deckkraft ab 0,65, bei der die Schrift
-  // auf --panel noch 4,5:1 haelt (Classic: 0,73). Schafft --dim das auch voll nicht, wie
-  // in 57 der 126 erzeugten Farbwelten, bleibt es bei voller Deckkraft.
+  // auf --panel noch 4,5:1 haelt (Classic: 0,73). Voll haelt --dim das seit dem 31.10.2026
+  // in jeder Farbwelt (themeVars). Schaffte es das einmal nicht, bliebe es bei voller Deckkraft.
   function grpDeckkraft(dim, panel) {
     var g = document.createElement('canvas').getContext('2d');
     function rgb(css) {
