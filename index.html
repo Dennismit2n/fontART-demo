@@ -868,7 +868,7 @@ Franz jagt im komplett verwahrlosten Taxi quer durch Bayern</textarea>
   <div class="card" style="max-width:600px;width:100%">
     <button class="x" id="importClose">×</button>
     <h2 data-i18n="dlgImportTitel">📥 .ttf importieren</h2>
-    <p><b id="importInfo">Schrift geladen.</b> <span data-i18n="dlgImportFrage">Wie sollen die Buchstaben eingefügt werden?</span></p>
+    <p><b id="importInfo"></b> <span data-i18n="dlgImportFrage">Wie sollen die Buchstaben eingefügt werden?</span></p>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0">
       <button class="rbtn" id="importTemplate" style="flex:1;min-width:210px;text-align:left;padding:14px"><span data-i18n="btnImportVorlage">🖼️ Als Vorlage</span><br><span style="font-weight:400;font-size:12px;color:var(--dim)" data-i18n="btnImportVorlageInfo">Schablone pro Buchstabe zum Nachzeichnen — beste Qualität, deine Handschrift</span></button>
       <button class="rbtn" id="importFill" style="flex:1;min-width:210px;text-align:left;padding:14px"><span data-i18n="btnImportFlaeche">🩹 Direkt als Fläche</span><br><span style="font-weight:400;font-size:12px;color:var(--dim)" data-i18n="btnImportFlaecheInfo">Echte Umrisse sofort auf der Zeichenfläche — editierbar, überschreibt vorhandene Zeichnungen</span></button>
@@ -2256,6 +2256,7 @@ var I18N = {
     _name: 'Deutsch',
 
     tipFontName: 'Name deiner Schrift',
+    msgSchriftnameVorgabe: 'MeineSchrift',
     lblGlyphenGezeichnet: 'Glyphen gezeichnet',
     tipDemoUhr: 'Diese Demo-Sitzung läuft 60 Minuten. Ein Neustart beginnt von vorn.',
     lblDemoAbzeichen: '✍️ Testversion · nur a–z',
@@ -2821,6 +2822,7 @@ var I18N = {
     _name: 'English',
     docTitle: 'fontART Designer — the demo version to try out',
     tipFontName: 'Name of your font',
+    msgSchriftnameVorgabe: 'MyFont',
     lblGlyphenGezeichnet: 'glyphs drawn',
     tipDemoUhr: 'This demo session runs for 60 minutes. A restart starts the 60 minutes over.',
     lblDemoAbzeichen: '✍️ Demo · a–z only',
@@ -3385,6 +3387,7 @@ var I18N = {
     _name: 'Español',
     docTitle: 'fontART Designer — versión de prueba para experimentar',
     tipFontName: 'Nombre de tu fuente',
+    msgSchriftnameVorgabe: 'MiFuente',
     lblGlyphenGezeichnet: 'Glifos dibujados',
     tipDemoUhr: 'Esta sesión de prueba dura 60 minutos. Al reiniciar empieza de cero.',
     lblDemoAbzeichen: '✍️ Versión de prueba · solo a–z',
@@ -3949,6 +3952,7 @@ var I18N = {
     _name: 'Français',
     docTitle: 'fontART Designer — version d\'essai à découvrir',
     tipFontName: 'Le nom de ta police',
+    msgSchriftnameVorgabe: 'MaPolice',
     lblGlyphenGezeichnet: 'glyphes dessinés',
     tipDemoUhr: 'Cette session de démo dure 60 minutes. Un redémarrage repart de zéro.',
     lblDemoAbzeichen: '✍️ Version d\'essai · a–z seulement',
@@ -4513,6 +4517,7 @@ var I18N = {
     _name: 'Italiano',
     docTitle: 'fontART Designer — la versione di prova',
     tipFontName: 'Il nome del tuo font',
+    msgSchriftnameVorgabe: 'IlMioFont',
     lblGlyphenGezeichnet: 'glifi disegnati',
     tipDemoUhr: 'Questa sessione di prova dura 60 minuti. Al riavvio si ricomincia da capo.',
     lblDemoAbzeichen: '✍️ Prova · solo a–z',
@@ -5077,6 +5082,7 @@ var I18N = {
     _name: 'Nederlands',
     docTitle: 'fontART Designer — proefversie om uit te proberen',
     tipFontName: 'Naam van je lettertype',
+    msgSchriftnameVorgabe: 'MijnLettertype',
     lblGlyphenGezeichnet: 'glyphen getekend',
     tipDemoUhr: 'Deze demosessie duurt 60 minuten. Na een herstart begint de tijd opnieuw.',
     lblDemoAbzeichen: '✍️ Proefversie · alleen a–z',
@@ -5641,6 +5647,7 @@ var I18N = {
     _name: 'Polski',
     docTitle: 'fontART Designer — wersja testowa do wypróbowania',
     tipFontName: 'Nazwa twojej czcionki',
+    msgSchriftnameVorgabe: 'MojaCzcionka',
     lblGlyphenGezeichnet: '· narysowane glify',
     tipDemoUhr: 'Ta sesja demo trwa 60 minut. Po ponownym uruchomieniu liczenie zaczyna się od nowa.',
     lblDemoAbzeichen: '✍️ Wersja testowa · tylko a–z',
@@ -6232,6 +6239,7 @@ var I18N = {
     _name: 'Português',
     docTitle: 'fontART Designer — versão de teste para experimentar',
     tipFontName: 'Nome da sua fonte',
+    msgSchriftnameVorgabe: 'MinhaFonte',
     lblGlyphenGezeichnet: 'glifos desenhados',
     tipDemoUhr: 'Esta sessão de demonstração dura 60 minutos. Reiniciar começa tudo de novo.',
     lblDemoAbzeichen: '✍️ Versão de teste · só a–z',
@@ -6796,6 +6804,7 @@ var I18N = {
     _name: 'Türkçe',
     docTitle: 'fontART Designer — deneme sürümü, hemen dene',
     tipFontName: 'Yazı tipinin adı',
+    msgSchriftnameVorgabe: 'Fontum',
     lblGlyphenGezeichnet: 'glif çizildi',
     tipDemoUhr: 'Bu deneme oturumu 60 dakika sürer. Yeniden başlatınca baştan sayar.',
     lblDemoAbzeichen: '✍️ Deneme sürümü · yalnızca a–z',
@@ -7360,6 +7369,7 @@ var I18N = {
     _name: 'Русский',
     docTitle: 'fontART Designer — демоверсия',
     tipFontName: 'Название твоего шрифта',
+    msgSchriftnameVorgabe: 'MyFont',
     lblGlyphenGezeichnet: 'нарисовано',
     tipDemoUhr: 'Сеанс демоверсии длится 60 минут. После перезапуска отсчёт начинается заново.',
     lblDemoAbzeichen: '✍️ Демоверсия · только a–z',
@@ -7951,6 +7961,7 @@ var I18N = {
     _name: 'हिन्दी',
     docTitle: 'fontART Designer — आज़माने के लिए डेमो संस्करण',
     tipFontName: 'आपके फ़ॉन्ट का नाम',
+    msgSchriftnameVorgabe: 'MyFont',
     lblGlyphenGezeichnet: 'ग्लिफ़ बन चुके',
     tipDemoUhr: 'यह डेमो सत्र 60 मिनट चलता है। दोबारा शुरू करने पर गिनती फिर से शुरू होती है।',
     lblDemoAbzeichen: '✍️ डेमो · सिर्फ़ a–z',
@@ -8515,6 +8526,7 @@ var I18N = {
     _name: '中文',
     docTitle: 'fontART Designer——试用版，上手试试',
     tipFontName: '你这套字体的名字',
+    msgSchriftnameVorgabe: 'MyFont',
     lblGlyphenGezeichnet: '个字形已画',
     tipDemoUhr: '这次试用会话有 60 分钟。重新启动会从头开始。',
     lblDemoAbzeichen: '✍️ 试用版 · 仅 a–z',
@@ -9079,6 +9091,7 @@ var I18N = {
     _name: '日本語',
     docTitle: 'fontART Designer — 体験版でおためし',
     tipFontName: 'フォントの名前',
+    msgSchriftnameVorgabe: 'MyFont',
     lblGlyphenGezeichnet: 'グリフ完成',
     tipDemoUhr: 'この体験版は1回60分です。開き直すと最初から数え直します。',
     lblDemoAbzeichen: '✍️ 体験版・a–zのみ',
@@ -9643,6 +9656,7 @@ var I18N = {
     _name: '한국어',
     docTitle: 'fontART Designer — 직접 써 보는 체험판',
     tipFontName: '글꼴 이름',
+    msgSchriftnameVorgabe: 'MyFont',
     lblGlyphenGezeichnet: '그린 글리프',
     tipDemoUhr: '이 체험판은 한 번에 60분 동안 쓸 수 있어요. 다시 시작하면 시간도 처음부터예요.',
     lblDemoAbzeichen: '✍️ 체험판 · a–z만',
@@ -11219,7 +11233,7 @@ var i18n = (function () {
       alternates.push(ch.length > 1 ? { baseName: glyphDefName(ch), altNames: names } : { base: ch.charCodeAt(0), altNames: names });
     });
     defs.push({ unicode: 0x20, name: 'space', advance: Math.round(EM * 0.3), contours: [] });
-    var family = demoExportLaeuft ? 'fontART DEMO' : ($('fontName').value || 'MeineSchrift').trim();
+    var family = demoExportLaeuft ? 'fontART DEMO' : ($('fontName').value || i18n.t('msgSchriftnameVorgabe')).trim();
     var kerning = [];
     Object.keys(kernPairs).forEach(function (pair) {
       var v = Math.round(kernPairs[pair] || 0);
@@ -11275,7 +11289,7 @@ var i18n = (function () {
     return penX;
   }
   function renderSpecimen() {
-    var family = ($('fontName').value || 'MeineSchrift').trim();
+    var family = ($('fontName').value || i18n.t('msgSchriftnameVorgabe')).trim();
     var lines = [
       i18n.t('msgMusterPangram1'),
       i18n.t('msgMusterPangram2'),
@@ -12113,14 +12127,14 @@ var i18n = (function () {
       if (arr.length) proj.alts[ch] = arr;
     });
     var blob = new Blob([JSON.stringify(proj)], { type: 'application/json' });
-    downloadBlob(blob, ($('fontName').value || 'MeineSchrift').replace(/[^A-Za-z0-9]/g, '') + '.fontart.json');
+    downloadBlob(blob, ($('fontName').value || i18n.t('msgSchriftnameVorgabe')).replace(/[^A-Za-z0-9]/g, '') + '.fontart.json');
     toast(i18n.t('msgProjektGespeichert'));
   }
   function loadProject(obj) {
     glyphs = {}; altGlyphs = {}; curVariant = 0; 
     customLigs = (obj.customLigs || []).slice();
     puaSymbols = (obj.puaSymbols || []).map(function (sy) { return { cp: sy.cp, name: sy.name }; });
-    $('fontName').value = obj.family || 'MeineSchrift';
+    $('fontName').value = obj.family || i18n.t('msgSchriftnameVorgabe');
     kernPairs = obj.kerning || {};
     if (obj.customBrush) { var cbi = new Image(); cbi.onload = function () { customBrushCanvas = document.createElement('canvas'); customBrushCanvas.width = 140; customBrushCanvas.height = 140; customBrushCanvas.getContext('2d').drawImage(cbi, 0, 0, 140, 140); }; cbi.src = obj.customBrush; }
     compList = [];
@@ -13042,26 +13056,13 @@ var i18n = (function () {
   $('sbVal').textContent = sidebearing;
   if ($('stabVal')) $('stabVal').textContent = '40';
   if ($('smoothVal')) $('smoothVal').textContent = String(smoothing);
-  // Sprachwahl: der Waehler wird aus der Tabelle gefuellt, die Sprache aus
-  // Speicher oder Browsereinstellung erkannt. Erst danach baut app.js weiter.
-  (function () {
-    var sel = $('langSelect'); if (!sel) return;
-    var codes = Object.keys(I18N);
-    for (var i = 0; i < codes.length; i++) {
-      var opt = document.createElement('option');
-      opt.value = codes[i];
-      opt.textContent = I18N[codes[i]]._name;
-      sel.appendChild(opt);
-    }
-    var gewaehlt = i18n.detect();
-    sel.value = gewaehlt;
-    i18n.apply(gewaehlt);
-    sel.addEventListener('change', function () { i18n.apply(sel.value); });
-  })();
 
   // Nach einem Sprachwechsel baut apply() nur, was im Markup steht. Alles, was
   // app.js zur Laufzeit erzeugt - die Palette mit ihren Gruppennamen, die Listen,
   // die offenen Dialoge - muss hier nachgezogen werden. i18n.js ruft den Haken auf.
+  // Er steht VOR der Sprachwahl weiter unten, damit ihn schon die erste Sprache
+  // erreicht. Bis 01.11.2026 stand er dahinter: Palette, Tooltips und Stift-Profil
+  // blieben beim Laden deutsch, bis jemand die Sprache von Hand wechselte.
   window.onSpracheGewechselt = function () {
     buildPalette();
     refreshPaletteMarks();
@@ -13084,8 +13085,44 @@ var i18n = (function () {
       if (md && md.classList.contains('open')) nachziehen[n][1]();
     }
     if ($('charmapModal').classList.contains('open')) openCharmap(cmCopyMode);
+    vorgabeSetzen('fontName', i18n.t('msgSchriftnameVorgabe'));
+    vorgabeSetzen('typePad', tipptestVorgabe());
+    vorgabeSetzen('sheetText', 'abcdefghijklm\nnopqrstuvwxyz\n' + i18n.t('msgMusterPangram1'));
     schedulePreview();
   };
+  // Schriftname, Tipptest und Uebungsblatt haben Vorgaben, die der Sprache folgen,
+  // solange niemand darin getippt hat. Der Name bleibt in jeder Sprache ASCII, weil
+  // Dateiname und PostScript-Name nur A-Z, a-z und 0-9 behalten. Das Pangram ist je
+  // Sprache so gewaehlt, dass sich jedes Zeichen malen laesst.
+  var vorgaben = {};
+  function vorgabeSetzen(id, text) {
+    var el = $(id); if (!el) return;
+    if (el.value === el.defaultValue || el.value === vorgaben[id]) el.value = text;
+    vorgaben[id] = text;
+  }
+  function tipptestVorgabe() {
+    var p = i18n.t('msgMusterPangram1');
+    // Ein Punkt nur nach einem Wort in lateinischer, griechischer oder kyrillischer
+    // Schrift. Kana und ein schon gesetztes Satzzeichen bekommen keinen.
+    return p + (/[A-Za-z\u00C0-\u024F\u0370-\u04FF]$/.test(p) ? '.' : '') + ' 0123456789';
+  }
+
+  // Sprachwahl: der Waehler wird aus der Tabelle gefuellt, die Sprache aus
+  // Speicher oder Browsereinstellung erkannt. Erst danach baut app.js weiter.
+  (function () {
+    var sel = $('langSelect'); if (!sel) return;
+    var codes = Object.keys(I18N);
+    for (var i = 0; i < codes.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = codes[i];
+      opt.textContent = I18N[codes[i]]._name;
+      sel.appendChild(opt);
+    }
+    var gewaehlt = i18n.detect();
+    sel.value = gewaehlt;
+    i18n.apply(gewaehlt);
+    sel.addEventListener('change', function () { i18n.apply(sel.value); });
+  })();
 
   renderPreview();
   window.addEventListener('resize', schedulePreview);
