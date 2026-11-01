@@ -538,8 +538,14 @@
   :root[data-vision="invert"] { filter: invert(1); }
   :root[data-vision="invert"] aside.left .grp-title { opacity: 1; }
   /* Kontrast nach dem Umdrehen: Pink und Gefahr aus Classic fielen umgedreht unter 4,5:1
-     und werden dafuer heller angesetzt. Die anderen Farbwelten bleiben, wie gewaehlt. */
-  :root[data-vision="invert"]:is(:not([data-design]), [data-design="classic"]) { --pink: #ff89b5 !important; --danger: #ff8f75 !important; }
+     und werden dafuer heller angesetzt, Rot so weit, dass es auch auf --panel2 (Kerning-Liste)
+     haelt. Die Schrift der dunklen und Neon-Farbwelten rechnet app.js nach (umkehrVars), ihr
+     Rot steht hier: so viel heller, wie die schwaechste Farbwelt braucht. Der helle Stil haelt
+     auch umgedreht. */
+  :root[data-vision="invert"]:is(:not([data-design]), [data-design="classic"]) { --pink: #ff89b5 !important; --danger: #ff9178 !important; }
+  :root[data-vision="invert"]:is([data-design="dunkel"], [data-design="neon"]) { --danger: #eaa695 !important; }
+  /* Das gefuellte aktive Werkzeug traegt keine Schrift, nur ein Bild: Es behaelt den Ton der Farbwelt */
+  :root[data-vision="invert"]:is([data-design="dunkel"], [data-design="neon"]) .tool.on { background: var(--akzent-knopf, var(--accent)); border-color: var(--akzent-knopf, var(--accent)); }
   @media print {
     :root[data-vision="invert"] { filter: none; }
   }
@@ -11694,6 +11700,14 @@ var i18n = (function () {
     document.documentElement.setAttribute('data-design', i < 0 ? 'classic' : style);
     // Gruppentitel am Handy: so wenig Deckkraft wie moeglich, aber 4,5:1 (siehe grpDeckkraft)
     root.setProperty('--grp-alpha', String(grpDeckkraft(vars['--dim'], vars['--panel'])));
+    // Sehhilfe "Umgekehrte Farben": Die Schrift der dunklen und Neon-Farbwelten rueckt nach, bis
+    // sie auch umgedreht 4,5:1 haelt (siehe umkehrVars). Ein Wechsel der Sehhilfe setzt neu.
+    if (i >= 0 && style !== 'hell' && document.documentElement.getAttribute('data-vision') === 'invert') {
+      var u = umkehrVars(vars);
+      Object.keys(u).forEach(function (k) { root.setProperty(k, u[k]); });
+      // Das gefuellte aktive Werkzeug behaelt seinen bisherigen Ton (template.html, .tool.on)
+      root.setProperty('--akzent-knopf', vars['--accent']);
+    }
     themeState = { i: i, style: style };
   }
   function renderThemes() {
@@ -12893,6 +12907,8 @@ var i18n = (function () {
       else if (v === 'invert') r.setAttribute('data-vision', 'invert');
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.content = hc === 'light' ? '#ffffff' : (hc === 'dark' ? '#000000' : '#0e0c16');
+      // Mit Umkehr rechnet applyTheme die Schrift der gewaehlten Farbwelt nach (umkehrVars)
+      if (themeState.i >= 0) applyTheme(themeState.i, themeState.style);
     }
     function nochmal() { var v = gespeichert(); anwenden(v); sel.value = eintrag(v); }
     sel.addEventListener('change', function () {
@@ -12938,6 +12954,48 @@ var i18n = (function () {
       if (haelt(lum(m)) && haelt(lum(m.map(function (v) { return Math.round(v * 255) / 255; })))) return a / 100;
     }
     return 1;
+  }
+  // Umgekehrte Farben (template.html, filter: invert(1)) drehen jeden Farbkanal um, 255 - Wert.
+  // Der WCAG-Kontrast uebersteht das nicht: In den dunklen und Neon-Farbwelten fiel die
+  // Nebenschrift umgedreht auf 3,3:1, der Neon-Akzent bis 1,6:1. Wie in themeVars rueckt die
+  // Schrift deshalb heller (umgedreht also dunkler), gleicher Farbton, und nur so weit, bis sie
+  // auf jeder Flaeche, auf der sie steht, auch umgedreht 4,5:1 haelt (die aus themeVars, dazu
+  // --panel und --bg2). Pink ist ausserdem der Grund des Loeschkreuzes einer Alternate (Schrift
+  // --bg). Rot steht fest in template.html, der helle Stil haelt auch umgedreht, Classic hat dort
+  // eigene Werte.
+  function umkehrVars(v) {
+    var u = {};
+    function zahlen(css) { return css.match(/\d+/g).map(Number); }   // hsl(h,s%,l%)
+    function rgb(name) { return hslRgb.apply(null, zahlen(v[name])); }
+    function um(f) { return f.map(function (x) { return 255 - x; }); }
+    function haelt(s, f, deckkraft) {
+      if (!deckkraft) return kontrast(um(s), um(f)) >= 4.5;
+      // gemischt einmal genau und einmal auf ganze Stufen gerundet wie beim Zeichnen
+      var m = s.map(function (x, k) { return x * deckkraft + f[k] * (1 - deckkraft); });
+      return kontrast(um(m), um(f)) >= 4.5 && kontrast(um(m.map(Math.round)), um(f)) >= 4.5;
+    }
+    var panel = rgb('--panel'), panel2 = rgb('--panel2'), bg2 = rgb('--bg2'), bg = rgb('--bg');
+    // feste Flaechen aus template.html: Kopfzeile (Verlauf), Meldung, gewaehltes Zeichen, Leerzeichen-Hinweis
+    var kopf1 = [0x17, 0x13, 0x26], kopf2 = [0x12, 0x0f, 0x1e], meldung = [0x25, 0x20, 0x38],
+      gewaehlt = [0x24, 0x1d, 0x3a], hinweis = [0x26, 0x20, 0x45];
+    var plan = {
+      '--ink': [[panel2], [meldung], [gewaehlt], [panel], [bg2], [kopf1], [kopf2]],
+      '--dim': [[panel], [bg2], [kopf1], [kopf2]],
+      '--accent': [[panel2, 0.9], [bg2], [panel]],   // Zeichentabelle, aktuelles Zeichen, Alternate +
+      '--accent2': [[panel2], [hinweis], [panel]],
+      '--pink': [[panel]]
+    };
+    Object.keys(plan).forEach(function (name) {
+      var d = zahlen(v[name]);
+      function ok() {
+        var s = hslRgb(d[0], d[1], d[2]);
+        return plan[name].every(function (e) { return haelt(s, e[0], e[1]); }) &&
+          (name !== '--pink' || kontrast(um(bg), um(s)) >= 4.5);
+      }
+      while (!ok() && d[2] < 100) d[2]++;
+      u[name] = hslc(d[0], d[1], d[2]);
+    });
+    return u;
   }
   $('helpBtn').addEventListener('click', function () { $('helpModal').classList.toggle('open'); });
   $('helpClose').addEventListener('click', function () { $('helpModal').classList.remove('open'); });
