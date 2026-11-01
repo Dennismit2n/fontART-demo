@@ -1,7 +1,7 @@
 {
-  "name": "fontART Designer — Testversion / Demo",
+  "name": "fontART Designer · Testversion / Demo",
   "short_name": "fontART",
-  "description": "Your handwriting as a real font — deine Handschrift als echte Schriftart. Demo: a–z only.",
+  "description": "Your handwriting as a real font / deine Handschrift als echte Schriftart. Demo: a–z only.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
