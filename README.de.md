@@ -8,7 +8,7 @@ Dieses Repository ist die Heimat der **kostenlosen Testversion**, in zwei Fassun
 
 **→ [Im Browser öffnen](https://dennismit2n.github.io/fontART-demo/)** · **[Für Windows herunterladen](https://github.com/Dennismit2n/fontART-demo/releases/latest)** · [English version of this file](README.md) · [Anleitung und Neuigkeiten](https://dennismit2n.github.io/werkstatt.html#fontart)
 
-<img src="docs/screenshot-de.webp" alt="fontART Designer im Browser, dunkel: links die Zeichenleiste mit Groß- und Kleinbuchstaben, Zahlen, Umlauten und Satzzeichen, in der Mitte die Malfläche mit einem gemalten d, rechts die Glyph-Werkzeuge und die Schrift-Einstellungen, unten der Tipptest mit dem Wort „hallo“ in der eigenen Schrift." width="800">
+<img src="docs/screenshot-de.webp" alt="fontART Designer im Browser, dunkel: links die Zeichenleiste mit Groß- und Kleinbuchstaben, Zahlen, Umlauten und Satzzeichen, in der Mitte die Malfläche mit einem gemalten a, rechts die Glyph-Werkzeuge und die Schrift-Einstellungen, unten der Tipptest mit dem Wort „hallo“ in der eigenen Schrift." width="800">
 
 ## Welche Fassung für wen
 

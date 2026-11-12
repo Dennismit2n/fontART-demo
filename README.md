@@ -8,7 +8,7 @@ This repository is the home of the **free trial**, in two flavours: a page that 
 
 **→ [Open in your browser](https://dennismit2n.github.io/fontART-demo/)** · **[Download for Windows](https://github.com/Dennismit2n/fontART-demo/releases/latest)** · [Deutsche Fassung dieser Datei](README.de.md) · [Guide and news](https://dennismit2n.github.io/werkstatt.html#fontart)
 
-<img src="docs/screenshot-en.webp" alt="fontART Designer in the browser, dark: the character bar with capitals, lowercase letters, digits, umlauts and punctuation on the left, the drawing area with a painted d in the middle, the glyph tools and font settings on the right, and the typing test with the word hello in your own typeface at the bottom." width="800">
+<img src="docs/screenshot-en.webp" alt="fontART Designer in the browser, dark: the character bar with capitals, lowercase letters, digits, umlauts and punctuation on the left, the drawing area with a painted a in the middle, the glyph tools and font settings on the right, and the typing test with the word hello in your own typeface at the bottom." width="800">
 
 ## Which one for whom
 
